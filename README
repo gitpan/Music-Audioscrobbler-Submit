@@ -188,6 +188,11 @@ SEE ALSO
     Music::Tag, Music::Audioscrobbler::MPD
 
 CHANGES
+    Release Name: 0.02
+        *   Will print error and die if lastfm_password is not set.
+
+        *   Will print error and die if BADAUTH is received.
+
     Release Name: 0.01
         *   Initial Release
 

@@ -1,5 +1,5 @@
 package Music::Audioscrobbler::Submit;
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 # Copyright (c) 2008 Edward J. Allen III
 
@@ -129,6 +129,10 @@ sub new {
             $self->options->{lastfm_md5password} =
               Digest::MD5::md5_hex( $self->options->{lastfm_password} );
             delete $self->options->{lastfm_password};
+        }
+        else {
+            $self->status(0, "ERORR: lastfm_password option is not set. Please update config file. This error is fatal.");
+            die "Bad password info."
         }
     }
 
@@ -481,8 +485,8 @@ sub handshake {
         return 0;
     }
     elsif ( $status eq "BADAUTH" ) {
-        $self->status( 0, "Bad authorization code: ", @lines );
-        return undef;
+        $self->status( 0, "Bad authorization code (I have the wrong password): ", @lines);
+        die "Bad password\n";
     }
     elsif ( $status eq "BADTIME" ) {
         $self->status( 0, "Bad time stamp: ", @lines );
@@ -719,6 +723,20 @@ L<Music::Tag>, L<Music::Audioscrobbler::MPD>
 =for changes continue
 
 =over 4
+
+=item Release Name: 0.02
+
+=over 4
+
+=item *
+
+Will print error and die if lastfm_password is not set.
+
+=item *
+
+Will print error and die if BADAUTH is received. 
+
+=back
 
 =item Release Name: 0.01
 
