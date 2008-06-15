@@ -1,5 +1,5 @@
 package Music::Audioscrobbler::Submit;
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 # Copyright (c) 2008 Edward J. Allen III
 
@@ -81,6 +81,7 @@ sub default_options {
        mdb_opts        => {},
        musicdb         => 0,
        musictag        => 0,
+       musictag_overwrite => 0,
        verbose         => 1,
        timeout         => 15,      # Set low to prevent missing a scrobble.  Rather retry submit.
        logfile            => undef,
@@ -189,6 +190,10 @@ Use the Music::Tag::MusicBrainz plugin to get missing "mbid" value.  Defaults fa
 =item musictag            
 
 True if you want to use L<Music::Tag> to get info from file.  This is important if you wish to use filenames to submit from.
+
+=item musictag_overwrite			
+
+True if you want to Music::Tag info to override file info.  Defaults to false, which with the unicode problems with Music::Tag is a good thing.
 
 =item music_tag_opts        
 
@@ -644,9 +649,10 @@ sub info_to_hash {
             eval {
                 my $extra = $self->_get_info_from_file( $info->{filename} );
                 while ( my ( $k, $v ) = each %{$extra} ) {
-                    next
-                      if ( ( $k eq "secs" ) && ( exists $info->{secs} ) && ( $info->{secs} > 30 ) );
-                    $info->{$k} = $v;
+                    next if ( ( $k eq "secs" ) && ( exists $info->{secs} ) && ( $info->{secs} > 30 ) );
+                    if (($self->options->{musictag_overwrite}) || ( not $info->{$k})) {
+                        $info->{$k} = $v;
+                    }
                 }
             };    # eval'd to protect from a bad Music::Tag plugin causing trouble.
             if ($@) { $self->status( 0, "Error with Music::Tag: ", $@ ) }
@@ -718,9 +724,24 @@ sub _get_info_from_file {
 
 L<Music::Tag>, L<Music::Audioscrobbler::MPD>
 
+=for changes continue
+
 =head1 CHANGES
 
-=for changes continue
+=over 4
+
+=item Release Name: 0.03
+
+=over 4
+
+=item *
+
+Added musictag_overwrite option. This is false by default. It is a workaround for problems with Music::Tag and unicode.  Setting this to
+true allows Music::Tag info to overwrite info from MPD.  Do not set this to true until Music::Tag returns proper unicode consistantly.
+
+=back
+
+=back
 
 =over 4
 

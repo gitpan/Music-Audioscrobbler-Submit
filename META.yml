@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Music-Audioscrobbler-Submit
-version:             0.02
+version:             0.03
 abstract:            Module providing routines to submit songs to last.fm using 1.2 protocol.
 license:             perl
 author:              
