@@ -12,6 +12,5 @@ WriteMakefile( NAME         => "Music::Audioscrobbler::Submit",
                               'Config::Options' => 0.01,
                               'LWP::UserAgent'  => 2,
                               'Tie::Hash'       => 1,
-                              'Music::Tag'      => .3,
                             },
              );

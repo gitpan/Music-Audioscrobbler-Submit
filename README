@@ -193,6 +193,12 @@ SEE ALSO
     Music::Tag, Music::Audioscrobbler::MPD
 
 CHANGES
+    Release Name: 0.04
+        *   I noticed that Music::Tag was called with a use function.
+            Removed this line to remove Music::Tag requirement.
+
+        *   Added some more level 4 debuging messages.
+
     Release Name: 0.03
         *   Added musictag_overwrite option. This is false by default. It is
             a workaround for problems with Music::Tag and unicode. Setting

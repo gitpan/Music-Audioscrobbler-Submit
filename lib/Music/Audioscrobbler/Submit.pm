@@ -1,5 +1,5 @@
 package Music::Audioscrobbler::Submit;
-our $VERSION = 0.03;
+our $VERSION = 0.04;
 
 # Copyright (c) 2008 Edward J. Allen III
 
@@ -72,7 +72,6 @@ use IO::File;
 use Config::Options;
 use LWP::UserAgent;
 use Tie::File;
-use Music::Tag;
 
 
 sub default_options {
@@ -650,7 +649,8 @@ sub info_to_hash {
                 my $extra = $self->_get_info_from_file( $info->{filename} );
                 while ( my ( $k, $v ) = each %{$extra} ) {
                     next if ( ( $k eq "secs" ) && ( exists $info->{secs} ) && ( $info->{secs} > 30 ) );
-                    if (($self->options->{musictag_overwrite}) || ( not $info->{$k})) {
+                    if (($self->options->{musictag_overwrite}) or ( not $info->{$k})) {
+                        $self->status(4, "Setting $k to $v from Music::Tag\n");
                         $info->{$k} = $v;
                     }
                 }
@@ -727,6 +727,24 @@ L<Music::Tag>, L<Music::Audioscrobbler::MPD>
 =for changes continue
 
 =head1 CHANGES
+
+=over 4
+
+=item Release Name: 0.04
+
+=over 4
+
+=item *
+
+I noticed that Music::Tag was called with a use function.  Removed this line to remove Music::Tag requirement. 
+
+=item *
+
+Added some more level 4 debuging messages.
+
+=back
+
+=back
 
 =over 4
 
