@@ -1,5 +1,5 @@
 package Music::Audioscrobbler::Submit;
-our $VERSION = 0.04;
+our $VERSION = 0.05;
 
 # Copyright (c) 2008 Edward J. Allen III
 
@@ -89,6 +89,7 @@ sub default_options {
        lastfm_client_id => "tst",
        lastfm_client_version => "1.0",
        get_mbid_from_mb => 0,
+       proxy_server     => undef,
        #lastfm_client_id => "mam",
        #lastfm_client_version => "0.1",
        music_tag_opts        => {
@@ -197,6 +198,10 @@ True if you want to Music::Tag info to override file info.  Defaults to false, w
 =item music_tag_opts        
 
 Options for L<Music::Tag>
+
+=item proxy_server
+
+URL for proxy_server in the form http://my.proxy.ca:8080
 
 =back
 
@@ -596,8 +601,12 @@ sub ua {
     my $ua   = shift;
     unless ( ( exists $self->{ua} ) && ( ref $self->{ua} ) ) {
         $self->{ua} = LWP::UserAgent->new();
+        $self->{ua}->env_proxy();
         $self->{ua}->agent( 'scrobbler-helper/1.0 ' . $self->{ua}->_agent() );
         $self->{ua}->timeout( $self->options->{timeout} );
+        if ($self->options->{proxy_server}) {
+            $self->{ua}->proxy('http', $self->options->{proxy_server}) 
+        }
     }
     unless ( $self->{'ua'} ) {
         die 'Could not create an LWP UserAgent object?!?';
@@ -727,6 +736,20 @@ L<Music::Tag>, L<Music::Audioscrobbler::MPD>
 =for changes continue
 
 =head1 CHANGES
+
+=over 4
+
+=item Release Name: 0.05
+
+=over 4
+
+=item *
+
+Added new option: proxy_server to set proxy_server.  Also now reads proxy server from enviroment.
+
+=back
+
+=back
 
 =over 4
 

@@ -84,6 +84,9 @@ METHODS
         music_tag_opts
             Options for Music::Tag
 
+        proxy_server
+            URL for proxy_server in the form http://my.proxy.ca:8080
+
     default_options()
         Returns a reference to the default options.
 
@@ -193,6 +196,10 @@ SEE ALSO
     Music::Tag, Music::Audioscrobbler::MPD
 
 CHANGES
+    Release Name: 0.05
+        *   Added new option: proxy_server to set proxy_server. Also now
+            reads proxy server from enviroment.
+
     Release Name: 0.04
         *   I noticed that Music::Tag was called with a use function.
             Removed this line to remove Music::Tag requirement.

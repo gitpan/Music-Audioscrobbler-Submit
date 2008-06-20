@@ -1,4 +1,8 @@
 CHANGES
+    Release Name: 0.05
+        *   Added new option: proxy_server to set proxy_server. Also now
+            reads proxy server from enviroment.
+
     Release Name: 0.04
         *   I noticed that Music::Tag was called with a use function.
             Removed this line to remove Music::Tag requirement.
